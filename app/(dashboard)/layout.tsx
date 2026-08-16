@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
 
 const NAV_LINKS = [
-  { href: '/', label: 'Dashboard' },
+  { href: '/dashboard', label: 'Dashboard' },
   { href: '/issues', label: 'Community Issues' },
   { href: '/food-rescue', label: 'Food Rescue' },
   { href: '/volunteer', label: 'Volunteer' },

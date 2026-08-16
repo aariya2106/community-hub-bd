@@ -26,7 +26,7 @@ export async function signup(formData: FormData) {
     redirect(`/signup?error=${encodeURIComponent(profileError.message)}`)
   }
 
-  redirect('/')
+  redirect('/dashboard')
 }
 
 export async function login(formData: FormData) {
@@ -40,11 +40,11 @@ export async function login(formData: FormData) {
     redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
 
-  redirect('/')
+  redirect('/dashboard')
 }
 
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  redirect('/login')
+  redirect('/')
 }

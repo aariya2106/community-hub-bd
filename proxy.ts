@@ -1,8 +1,8 @@
-// proxy.ts
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PUBLIC_PATHS = ['/login', '/signup']
+const PROTECTED_PREFIXES = ['/dashboard', '/issues', '/food-rescue', '/volunteer', '/leaderboard', '/map']
+const AUTH_PATHS = ['/login', '/signup']
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
@@ -27,17 +27,19 @@ export async function proxy(request: NextRequest) {
   )
 
   const { data: { user } } = await supabase.auth.getUser()
-  const isPublicPath = PUBLIC_PATHS.includes(request.nextUrl.pathname)
 
-  if (!user && !isPublicPath) {
+  const isProtected = PROTECTED_PREFIXES.some((p) => request.nextUrl.pathname.startsWith(p))
+  const isAuthPath = AUTH_PATHS.includes(request.nextUrl.pathname)
+
+  if (!user && isProtected) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  if (user && isPublicPath) {
+  if (user && isAuthPath) {
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
 
